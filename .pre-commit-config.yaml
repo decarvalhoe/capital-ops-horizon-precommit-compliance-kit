@@ -1,11 +1,11 @@
-# Kit pré-commit conformité dev — secrets, fichiers sensibles, licences des dépendances, SBOM. Outils libres uniquement.
-# Installation : pipx install pre-commit (ou pip) ; pre-commit install ; pre-commit run --all-files
+# Pre-commit compliance kit — secrets, sensitive files, dependency licences, SBOM. Free tools only.
+# Install: pipx install pre-commit (or pip); pre-commit install; pre-commit run --all-files
 repos:
-  - repo: https://github.com/gitleaks/gitleaks            # MIT — détection de secrets
+  - repo: https://github.com/gitleaks/gitleaks            # MIT — secret detection
     rev: v8.30.1
     hooks:
       - id: gitleaks
-  - repo: https://github.com/pre-commit/pre-commit-hooks   # MIT — hygiène de base
+  - repo: https://github.com/pre-commit/pre-commit-hooks   # MIT — basic hygiene
     rev: v6.0.0
     hooks:
       - id: detect-private-key
@@ -15,12 +15,12 @@ repos:
   - repo: local
     hooks:
       - id: dependency-licenses
-        name: Licences des dépendances Python (liste + refus des licences interdites)
+        name: Python dependency licences (list + deny list)
         entry: python3 scripts/dependency_licenses.py --deny "GPL-3.0-only,AGPL-3.0-only" --out compliance/licenses.json
         language: system
         pass_filenames: false
       - id: sbom
-        name: SBOM CycloneDX minimal (Python) depuis les métadonnées installées
+        name: Minimal CycloneDX SBOM (Python) from installed metadata
         entry: python3 scripts/sbom_cyclonedx.py --out compliance/sbom.cdx.json
         language: system
         pass_filenames: false

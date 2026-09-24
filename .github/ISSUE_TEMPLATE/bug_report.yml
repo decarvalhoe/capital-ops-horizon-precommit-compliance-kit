@@ -1,0 +1,33 @@
+name: Bug report
+description: A hook or script fails, misses something or reports wrongly
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Do not send private data.** Issues are public: never paste a real secret (even revoked), a real licences file or SBOM from a private project, or internal names. Rebuild the case with fictional content in a throwaway environment.
+  - type: input
+    id: env
+    attributes:
+      label: "OS, Python and pre-commit versions"
+      placeholder: "e.g. Ubuntu 24.04, Python 3.12, pre-commit 4.0"
+    validations: { required: true }
+  - type: textarea
+    id: repro
+    attributes:
+      label: Synthetic reproduction
+      description: Command run and a fictional file or environment that triggers the problem.
+      placeholder: "pre-commit run --all-files on a venv with only 'requests' installed"
+    validations: { required: true }
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Expected vs observed (paste hook output, with any secret-looking strings replaced)"
+    validations: { required: true }
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy check
+      options:
+        - label: This report contains no real secret and no private data
+          required: true

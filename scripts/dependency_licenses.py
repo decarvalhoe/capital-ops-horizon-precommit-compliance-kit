@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Liste les licences des paquets Python installés (métadonnées importlib) et échoue si une licence interdite est présente.
-Sans dépendance externe. Usage : dependency_licenses.py [--deny "SPDX1,SPDX2"] [--out fichier.json]"""
+"""Lists the licences of installed Python packages (importlib metadata) and fails if a denied licence is present.
+No external dependency. Usage: dependency_licenses.py [--deny "SPDX1,SPDX2"] [--out file.json]"""
 import argparse, json, os, sys
 from importlib import metadata
 
@@ -24,8 +24,8 @@ def main():
     if a.out:
         os.makedirs(os.path.dirname(a.out) or ".", exist_ok=True)
         with open(a.out, "w") as f: json.dump({"packages": rows, "denied": bad}, f, indent=2)
-    print(f"{len(rows)} paquets ; {sum(1 for r in rows if r['license']=='UNKNOWN')} sans licence déclarée ; {len(bad)} interdits")
-    for r in bad: print(f"  INTERDIT {r['name']} {r['version']} : {r['license']}")
+    print(f"{len(rows)} packages; {sum(1 for r in rows if r['license']=='UNKNOWN')} without a declared licence; {len(bad)} denied")
+    for r in bad: print(f"  DENIED {r['name']} {r['version']}: {r['license']}")
     sys.exit(1 if bad else 0)
 
 if __name__ == "__main__":

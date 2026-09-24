@@ -1,0 +1,26 @@
+name: Feedback
+description: Voluntary feedback after trying the kit
+labels: [feedback]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you. This is optional. **Do not send private data** (issues are public): describe your use without naming private projects, people or internal systems.
+  - type: dropdown
+    id: usage
+    attributes:
+      label: Did you run it on a real project?
+      options: ["Yes, on a public project", "Yes, on a private project (not named)", "Only on a test environment", "Not yet"]
+    validations: { required: true }
+  - type: textarea
+    id: useful
+    attributes:
+      label: "What was useful, what was missing or confusing?"
+    validations: { required: true }
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy check
+      options:
+        - label: This feedback contains no private data
+          required: true

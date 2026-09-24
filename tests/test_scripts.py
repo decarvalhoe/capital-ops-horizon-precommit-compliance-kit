@@ -12,7 +12,7 @@ class KitTests(unittest.TestCase):
 
     def test_licenses_deny_detects(self):
         r = subprocess.run([sys.executable, os.path.join(ROOT, "scripts/dependency_licenses.py"), "--deny", "MIT"], capture_output=True, text=True)
-        self.assertIn("interdits", r.stdout)   # au moins la ligne de synthèse ; le code de sortie dépend de l'environnement
+        self.assertIn("denied", r.stdout)   # at least the summary line; the exit code depends on the environment
 
     def test_sbom_is_cyclonedx(self):
         with tempfile.TemporaryDirectory() as d:
