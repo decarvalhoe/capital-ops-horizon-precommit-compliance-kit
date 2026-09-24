@@ -23,5 +23,9 @@ class KitTests(unittest.TestCase):
             self.assertEqual(bom["bomFormat"], "CycloneDX"); self.assertEqual(bom["specVersion"], "1.5")
             self.assertTrue(all(c["purl"].startswith("pkg:pypi/") for c in bom["components"]))
 
+    def test_merge_conflict_hook_checks_outside_merge(self):
+        with open(os.path.join(ROOT, ".pre-commit-config.yaml")) as f: cfg = f.read()
+        self.assertIn("--assume-in-merge", cfg)   # otherwise leftover markers pass when no merge is in progress
+
 if __name__ == "__main__":
     unittest.main()

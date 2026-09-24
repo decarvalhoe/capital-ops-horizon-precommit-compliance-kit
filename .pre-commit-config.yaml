@@ -12,6 +12,7 @@ repos:
       - id: check-added-large-files
         args: ["--maxkb=1024"]
       - id: check-merge-conflict
+        args: ["--assume-in-merge"]   # also flags leftover markers outside an active merge
   - repo: local
     hooks:
       - id: dependency-licenses

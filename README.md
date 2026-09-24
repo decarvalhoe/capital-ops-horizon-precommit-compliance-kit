@@ -13,16 +13,25 @@ pre-commit install
 pre-commit run --all-files       # writes compliance/licenses.json and compliance/sbom.cdx.json
 ```
 
-Example output on a fresh virtual environment (synthetic, numbers vary):
+First run: pre-commit downloads the pinned hooks (and a Go toolchain for gitleaks if none is installed; about 20 s and ~50 MB here, network required).
+Output observed on 2026-09-24 in a throwaway environment (rehearsal receipt in the Horizon repo):
 
 ```
-gitleaks.................................................................Passed
-detect private key.......................................................Passed
-Python dependency licences (list + deny list)............................Passed
-- 12 packages; 1 without a declared licence; 0 denied
-Minimal CycloneDX SBOM (Python) from installed metadata..................Passed
-- SBOM: 12 components -> compliance/sbom.cdx.json
+Detect hardcoded secrets......................................................Passed
+detect private key............................................................Passed
+check for added large files...................................................Passed
+check for merge conflicts.....................................................Passed
+Python dependency licences (list + deny list).................................Passed
+Minimal CycloneDX SBOM (Python) from installed metadata.......................Passed
 ```
+
+Rehearsed refusals (synthetic defects): fake AWS key, GitHub token and private key (gitleaks, `private-key`), the same key file (`detect private key`),
+a 1.5 MB binary (`check for added large files`), leftover `<<<<<<<` markers (`check for merge conflicts`, needs `--assume-in-merge`, set in the config),
+a package declaring `GPL-3.0-only` (licence hook exits 1). A real `git commit` is blocked when a hook fails.
+
+Notes: the two local hooks scan the Python environment that `python3` resolves to on your PATH (activate the virtual environment you want
+audited before committing). A package with no declared licence is listed as `UNKNOWN` and does **not** fail the hook: review those by hand.
+The SBOM validated with 0 errors against the official CycloneDX 1.5 JSON schema (`bom-1.5.schema.json`, 2026-09-24).
 
 Adjust `--deny` in `.pre-commit-config.yaml` (default: GPL-3.0-only, AGPL-3.0-only — decide according to your own policy).
 Tests: `python3 -m unittest tests.test_scripts`.

@@ -13,6 +13,12 @@ pre-commit install
 pre-commit run --all-files       # produit compliance/licenses.json et compliance/sbom.cdx.json
 ```
 
+Premier lancement : téléchargement des hooks épinglés (et d'une chaîne Go pour gitleaks si absente ; ~20 s, réseau requis). Répétition du 2026-09-24 en
+environnement jetable : dépôt sain accepté (6 hooks Passed) ; refus reproduits sur secrets factices, clé privée, fichier de 1,5 Mo, marqueurs de conflit
+(`--assume-in-merge` désormais dans la config), paquet `GPL-3.0-only` ; `git commit` réel bloqué. Les deux hooks locaux analysent l'environnement Python
+du `python3` de votre PATH ; un paquet sans licence déclarée est listé `UNKNOWN` et **ne fait pas échouer** le hook. SBOM validé sans erreur contre le
+schéma officiel CycloneDX 1.5.
+
 Adapter `--deny` dans `.pre-commit-config.yaml` (par défaut : GPL-3.0-only, AGPL-3.0-only — à décider selon votre politique).
 Tests : `python3 -m unittest tests.test_scripts`.
 
